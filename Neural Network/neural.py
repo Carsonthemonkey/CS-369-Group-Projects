@@ -64,15 +64,14 @@ class HiddenNeuron:
         s = sum(self.weights[i] * self.previous_layer[i].activation for i in range(len(self.previous_layer)))
         self.activation = logistic(s)
 
-    def update_delta(self, target):
+    def update_delta(self):
         """
         Update the delta value for this neuron. Also, backpropagate delta values to neurons in
         the previous layer.
-        :param target: The desired output of this neuron.
         """
         a = self.activation
-        t = target
-        self.delta = -a * (1 - a) * (t - a)
+        self.delta = a * (1 - a) * sum(self.previous_layer[i].delta * self.weights[i]
+                                       for i in range(len(self.previous_layer)))
         for unit, weight in zip(self.previous_layer[1:], self.weights[1:]):
             unit.delta += weight * self.delta  # TODO Replace None with the correct formula
 
@@ -112,8 +111,12 @@ class Network:
         """
         Set the deltas for all units to 0.
         """
-        # TODO You have to write this
-        pass
+        # TODO Check this
+        # for layer in self.layers[1:]:
+        #     for neuron in layer:
+        #         neuron.update_delta(0)
+        # This does the same (prob why it only works with no hidden layer)
+        self.layers[-1][0].update_delta(0)
 
     def update_deltas(self, targets):
         """
@@ -121,15 +124,21 @@ class Network:
         been called, so all neurons have had their activations updated.
         :param targets: The desired activations of the output neurons.
         """
-        # TODO You have to write this
-        pass
+        # TODO Check this
+        # for layer in self.layers[1:]:
+        #     for neuron, t in zip(layer, targets):
+        #         neuron.update_delta(t)
+        self.layers[-1][0].update_delta(targets[0])  # This does the same
 
     def update_weights(self):
         """
         Update the weights of all neurons.
         """
         # TODO You have to write this
-        pass
+        # for layer in self.layers[1:]:
+        #     for neuron in layer:
+        #         neuron.update_weights()
+        self.layers[-1][0].update_weights()  # This does the same
 
     def train(self, inputs, targets):
         """
