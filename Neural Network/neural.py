@@ -33,6 +33,7 @@ class OutputNeuron:
         the previous layer.
         :param target: The desired output of this neuron.
         """
+
         a = self.activation
         t = target
         self.delta = -a * (1 - a) * (t - a)
@@ -116,7 +117,10 @@ class Network:
         #     for neuron in layer:
         #         neuron.update_delta(0)
         # This does the same (prob why it only works with no hidden layer)
-        self.layers[-1][0].update_delta(0)
+        for layer in self.layers:
+            for neuron in layer:
+                neuron.delta = 0
+        # self.layers[-1][0].update_delta(0)
 
     def update_deltas(self, targets):
         """
