@@ -103,21 +103,16 @@ class Network:
         been called, so all neurons have had their activations updated.
         :param targets: The desired activations of the output neurons.
         """
-        # TODO Check this
-        # for layer in self.layers[1:]:
-        #     for neuron, t in zip(layer, targets):
-        #         neuron.update_delta(t)
-        self.layers[-1][0].update_delta(targets[0])  # This does the same
+        # TODO Fix this
+        for neuron, t in zip(self.layers[-1], targets):
+            neuron.update_delta(t)
 
     def update_weights(self):
         """
         Update the weights of all neurons.
         """
-        # TODO You have to write this
-        # for layer in self.layers[1:]:
-        #     for neuron in layer:
-        #         neuron.update_weights()
-        self.layers[-1][0].update_weights()  # This does the same
+        for neuron in self.layers[-1]:
+            neuron.update_weights()
 
     def train(self, inputs, targets):
         """
