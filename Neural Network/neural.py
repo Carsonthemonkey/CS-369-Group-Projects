@@ -107,8 +107,9 @@ class Network:
         """
         Update the weights of all neurons.
         """
-        for neuron in self.layers[-1]:
-            neuron.update_weights()
+        for layer in self.layers[1:]:
+            for neuron in layer:
+                neuron.update_weights()
 
     def train(self, inputs, targets):
         """
