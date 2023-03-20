@@ -1,3 +1,5 @@
+# by Carson Reader, Kat Berge, Nuzhat Hoque, Kelly Shor
+
 import math
 import random
 
