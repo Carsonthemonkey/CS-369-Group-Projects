@@ -38,7 +38,7 @@ class OutputNeuron:
         t = target
         self.delta = -a * (1 - a) * (t - a)
         for unit, weight in zip(self.previous_layer[1:], self.weights[1:]):
-            unit.delta += weight * self.delta  # TODO Replace None with the correct formula
+            unit.delta += weight * self.delta
 
     def update_weights(self):
         """
@@ -49,10 +49,6 @@ class OutputNeuron:
 
 
 class HiddenNeuron(OutputNeuron):
-    # TODO You have to write this. It is almost identical to OutputNeuron, but it has a different
-    # update_delta method which doesn't take target as an argument.  You can copy and paste or
-    # use inheritance.
-
     def update_delta(self):
         """
         Update the delta value for this neuron. Also, backpropagate delta values to neurons in
@@ -62,7 +58,8 @@ class HiddenNeuron(OutputNeuron):
         self.delta = a * (1 - a) * sum(self.previous_layer[i].delta * self.weights[i]
                                        for i in range(len(self.previous_layer)))
         for unit, weight in zip(self.previous_layer[1:], self.weights[1:]):
-            unit.delta += weight * self.delta  # TODO Replace None with the correct formula
+            unit.delta += weight * self.delta
+
 
 class Network:
 
@@ -103,7 +100,6 @@ class Network:
         been called, so all neurons have had their activations updated.
         :param targets: The desired activations of the output neurons.
         """
-        # TODO Fix this
         for neuron, t in zip(self.layers[-1], targets):
             neuron.update_delta(t)
 
