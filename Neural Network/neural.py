@@ -91,8 +91,8 @@ class Network:
         Set the deltas for all units to 0.
         """
         for layer in self.layers:
-            for neuron in layer:
-                neuron.delta = 0
+            for unit in layer:
+                unit.delta = 0
 
     def update_deltas(self, targets):
         """
@@ -100,16 +100,16 @@ class Network:
         been called, so all neurons have had their activations updated.
         :param targets: The desired activations of the output neurons.
         """
-        for neuron, t in zip(self.layers[-1], targets):
-            neuron.update_delta(t)
+        for unit, t in zip(self.layers[-1], targets):
+            unit.update_delta(t)
 
     def update_weights(self):
         """
         Update the weights of all neurons.
         """
         for layer in self.layers[1:]:
-            for neuron in layer:
-                neuron.update_weights()
+            for unit in layer:
+                unit.update_weights()
 
     def train(self, inputs, targets):
         """
