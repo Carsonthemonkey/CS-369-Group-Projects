@@ -151,3 +151,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 .vscode/settings.json
+Neural Network/.idea/inspectionProfiles/profiles_settings.xml
+Neural Network/.idea/misc.xml
+Neural Network/.idea/modules.xml
+Neural Network/.idea/Neural Network.iml
+Neural Network/.idea/vcs.xml

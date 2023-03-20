@@ -112,15 +112,9 @@ class Network:
         """
         Set the deltas for all units to 0.
         """
-        # TODO Check this
-        # for layer in self.layers[1:]:
-        #     for neuron in layer:
-        #         neuron.update_delta(0)
-        # This does the same (prob why it only works with no hidden layer)
         for layer in self.layers:
             for neuron in layer:
                 neuron.delta = 0
-        # self.layers[-1][0].update_delta(0)
 
     def update_deltas(self, targets):
         """
