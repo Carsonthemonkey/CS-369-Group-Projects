@@ -55,8 +55,7 @@ class HiddenNeuron(OutputNeuron):
         the previous layer.
         """
         a = self.activation
-        self.delta = a * (1 - a) * sum(self.previous_layer[i].delta * self.weights[i]
-                                       for i in range(len(self.previous_layer)))
+        self.delta *= a * (1 - a)
         for unit, weight in zip(self.previous_layer[1:], self.weights[1:]):
             unit.delta += weight * self.delta
 
@@ -102,6 +101,9 @@ class Network:
         """
         for unit, t in zip(self.layers[-1], targets):
             unit.update_delta(t)
+        for layer in self.layers[-2:0:-1]:
+            for unit in layer:
+                unit.update_delta()
 
     def update_weights(self):
         """
