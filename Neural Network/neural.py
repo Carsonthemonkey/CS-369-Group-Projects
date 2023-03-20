@@ -48,22 +48,10 @@ class OutputNeuron:
             self.weights[j] += -LEARNING_RATE * self.previous_layer[j].activation * self.delta
 
 
-class HiddenNeuron:
+class HiddenNeuron(OutputNeuron):
     # TODO You have to write this. It is almost identical to OutputNeuron, but it has a different
     # update_delta method which doesn't take target as an argument.  You can copy and paste or
     # use inheritance.
-    def __init__(self, previous_layer):
-        self.activation = None
-        self.delta = None
-        self.previous_layer = [InputNeuron()] + previous_layer  # Add bias node
-        self.weights = [random.gauss(0, 1) for _ in self.previous_layer]
-
-    def update_activation(self):
-        """
-        Update the activation of this neuron, based on its previous layer and weights.
-        """
-        s = sum(self.weights[i] * self.previous_layer[i].activation for i in range(len(self.previous_layer)))
-        self.activation = logistic(s)
 
     def update_delta(self):
         """
@@ -75,13 +63,6 @@ class HiddenNeuron:
                                        for i in range(len(self.previous_layer)))
         for unit, weight in zip(self.previous_layer[1:], self.weights[1:]):
             unit.delta += weight * self.delta  # TODO Replace None with the correct formula
-
-    def update_weights(self):
-        """
-        Update the weights of this neuron.
-        """
-        for j in range(len(self.previous_layer)):
-            self.weights[j] += -LEARNING_RATE * self.previous_layer[j].activation * self.delta
 
 class Network:
 
