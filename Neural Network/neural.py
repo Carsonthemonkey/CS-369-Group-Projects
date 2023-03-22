@@ -2,6 +2,9 @@
 
 import math
 import random
+from statistics import mean
+import matplotlib.pyplot as plt
+import numpy as np
 
 
 LEARNING_RATE = 1
@@ -70,6 +73,7 @@ class Network:
         """
         self.layers = [None] * len(sizes)
         self.layers[0] = [InputNeuron() for _ in range(sizes[0])]
+        self.mse_list = []
         for i in range(1, len(sizes) - 1):
             self.layers[i] = [HiddenNeuron(self.layers[i-1]) for _ in range(sizes[i])]
         self.layers[-1] = [OutputNeuron(self.layers[-2]) for _ in range(sizes[-1])]
@@ -115,6 +119,7 @@ class Network:
             for unit in layer:
                 unit.update_weights()
 
+
     def train(self, inputs, targets):
         """
         Feed inputs through this network, then adjust the weights so that the activations of
@@ -122,10 +127,40 @@ class Network:
         :param inputs: A list activation values for the input units.
         :param targets: A list desired activation values for the output units.
         """
-        self.predict(inputs)
+        predict = self.predict(inputs)
+        self.update_mse(predict, targets)
         self.reset_deltas()  # Set all deltas to 0
         self.update_deltas(targets)
         self.update_weights()
+
+    def update_mse(self, outputs, targets):
+        self.mse_list.append(mse(outputs, targets))
+
+    def train(self, inputs, targets):
+        """
+        Feed inputs through this network, then adjust the weights so that the activations of
+@ -122,14 +130,26 @@ class Network:
+        :param inputs: A list activation values for the input units.
+        :param targets: A list desired activation values for the output units.
+        """
+        # self.predict(inputs)
+        predict = self.predict(inputs)
+        self.update_mse(predict, targets)
+        self.reset_deltas()  # Set all deltas to 0
+        self.update_deltas(targets)
+        self.update_weights()
+
+    def graph_mse(self):
+        print(f'length of list: {self.mse_list}')
+        plt.plot(self.mse_list, "b.")
+        plt.xlabel("Iterations")
+        plt.ylabel("Mean Squared Error")
+        plt.show()
+
+
+def mse(predicts, targets):
+    return mean([p - t for p, t in zip(predicts, targets)])**2
+
 
 
 def logistic(x):
