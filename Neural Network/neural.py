@@ -119,7 +119,6 @@ class Network:
             for unit in layer:
                 unit.update_weights()
 
-
     def train(self, inputs, targets):
         """
         Feed inputs through this network, then adjust the weights so that the activations of
@@ -136,23 +135,25 @@ class Network:
     def update_mse(self, outputs, targets):
         self.mse_list.append(mse(outputs, targets))
 
-    def train(self, inputs, targets):
-        """
-        Feed inputs through this network, then adjust the weights so that the activations of
-@ -122,14 +130,26 @@ class Network:
-        :param inputs: A list activation values for the input units.
-        :param targets: A list desired activation values for the output units.
-        """
-        # self.predict(inputs)
-        predict = self.predict(inputs)
-        self.update_mse(predict, targets)
-        self.reset_deltas()  # Set all deltas to 0
-        self.update_deltas(targets)
-        self.update_weights()
+#     def train(self, inputs, targets):
+#         """
+#         Feed inputs through this network, then adjust the weights so that the activations of
+# @ -122,14 +130,26 @@ class Network:
+#         :param inputs: A list activation values for the input units.
+#         :param targets: A list desired activation values for the output units.
+#         """
+#         # self.predict(inputs)
+#         predict = self.predict(inputs)
+#         self.update_mse(predict, targets)
+#         self.reset_deltas()  # Set all deltas to 0
+#         self.update_deltas(targets)
+#         self.update_weights()
 
-    def graph_mse(self):
-        print(f'length of list: {self.mse_list}')
-        plt.plot(self.mse_list, "b.")
+    def graph_mse(self, m, n):
+        # print(f'length of list: {len(self.mse_list)}')
+        colors = ['b.', 'g.', 'r.', 'y.', 'c.', 'm.', 'k.', 'w.']  # TODO is it okay this only works for 8
+        for i in range(n):
+            plt.plot(self.mse_list[(i * m):((i + 1) * m)], colors[i])
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
         plt.show()
@@ -168,3 +169,21 @@ def logistic(x):
     Logistic sigmoid squashing function.
     """
     return 1 / (1 + math.exp(-x))
+
+
+def main():
+    net = Network([2, 5, 1])
+    inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
+    targets = [[0], [1], [1], [0]]
+    repetitions = 1000
+    for i, t in zip(inputs, targets):
+        for _ in range(repetitions):
+            net.train(i, t)
+    # for _ in range(1000):
+    #     for i, t in zip(inputs, targets):
+    #         net.train(i, t)
+    net.graph_mse(repetitions, len(targets))
+
+
+if __name__ == "__main__":
+    main()
