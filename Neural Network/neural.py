@@ -2,10 +2,11 @@
 
 import math
 import random
-
+from statistics import mean
+import matplotlib.pyplot as plt
 
 LEARNING_RATE = 1
-
+mse_values = []
 
 class InputNeuron:
 
@@ -70,6 +71,8 @@ class Network:
         """
         self.layers = [None] * len(sizes)
         self.layers[0] = [InputNeuron() for _ in range(sizes[0])]
+        total_error = 0
+
         for i in range(1, len(sizes) - 1):
             self.layers[i] = [HiddenNeuron(self.layers[i-1]) for _ in range(sizes[i])]
         self.layers[-1] = [OutputNeuron(self.layers[-2]) for _ in range(sizes[-1])]
@@ -115,6 +118,11 @@ class Network:
             for unit in layer:
                 unit.update_weights()
 
+    #def update_error(self):
+
+    def mse(self, inputs, targets):
+        return mean([(a - targets[0]) ** 2 for a in self.predict(inputs)])
+
     def train(self, inputs, targets):
         """
         Feed inputs through this network, then adjust the weights so that the activations of
@@ -123,6 +131,7 @@ class Network:
         :param targets: A list desired activation values for the output units.
         """
         self.predict(inputs)
+        mse_values.append(self.mse(inputs, targets))
         self.reset_deltas()  # Set all deltas to 0
         self.update_deltas(targets)
         self.update_weights()
@@ -133,3 +142,33 @@ def logistic(x):
     Logistic sigmoid squashing function.
     """
     return 1 / (1 + math.exp(-x))
+
+
+plt.plot(mse_values, label='mse')
+plt.xlabel('interation')
+plt.ylabel('accuracy')
+plt.legend()
+plt.show()
+
+def plot(dataset, k):
+    # Plot the classifier's boundary in the background
+    xs = []
+    ys = []
+    zs = []
+    for x in np.linspace(0, 1, 100):
+        for y in np.linspace(0, 1, 100):
+            coords = (x, y)
+            prediction = knn_classify(k, train, Point(coords, max))
+            xs.append(x)
+            ys.append(y)
+            zs.append(prediction)
+    plt.scatter(xs, ys, c=zs, alpha=0.5, s=2)
+    # Plot the training points
+    def plot_subset(subset, symbol):
+        xs = [p.coords[0] for p in subset]
+        ys = [p.coords[1] for p in subset]
+        plt.scatter(xs, ys, marker=symbol, color='black')
+    plot_subset([p for p in dataset if p.target], 'o')
+    plot_subset([p for p in dataset if not p.target], 'x')
+    # Show the result
+    plt.show()
