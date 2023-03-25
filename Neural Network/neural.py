@@ -138,7 +138,7 @@ class Network:
         """
         Record the current MSE
         :param outputs: list of predictions
-        :param target: list of targets
+        :param targets: list of targets
         """
         self.mse_list_trains.append(mse(outputs, targets))
 
@@ -158,9 +158,9 @@ class Network:
 def mse(predicts: list, targets: list) -> float:
     """
     Mean Squared error
-    :params predicts: A list of prediction numbers
+    :param predicts: A list of prediction numbers
     :param targets: A list of target numbers
-    :param returns: The mean squared error of the predictions
+    :return: The mean squared error of the predictions
     """
     return mean([p - t for p, t in zip(predicts, targets)])**2
 
