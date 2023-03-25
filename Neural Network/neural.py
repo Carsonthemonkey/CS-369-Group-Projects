@@ -71,6 +71,7 @@ class Network:
         """
         :param sizes: A list of the number of neurons in each layer, e.g., [2, 2, 1] for a network that can learn XOR.
         """
+        # self.predictions = {}
         self.layers = [None] * len(sizes)
         self.layers[0] = [InputNeuron() for _ in range(sizes[0])]
         self.mse_list = []
@@ -134,7 +135,12 @@ class Network:
         self.update_deltas(targets)
         self.update_weights()
 
-    def update_mse(self, outputs, targets):
+    def update_mse(self, outputs: list, targets: list) -> None:
+        """
+        Record the current MSE
+        :param outputs: list of predictions
+        :param target: list of targets
+        """
         self.mse_list_trains.append(mse(outputs, targets))
 
     def train(self, inputs, targets):
@@ -157,12 +163,19 @@ class Network:
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
         plt.show()
-        
-    def combine_mse(self):
+    
+    
+    def combine_mse(self) -> None:
+        """Combine MSE (mean squared error) values from current training epochs."""
         self.mse_list.append(mean(self.mse_list_trains))
         self.mse_list_trains = []
-
-def mse(predicts, targets):
+def mse(predicts: list, targets: list) -> float:
+    """
+    Mean Squared error
+    :params predicts: A list of prediction numbers
+    :param targets: A list of target numbers
+    :param returns: The mean squared error of the predictions
+    """
     return mean([p - t for p, t in zip(predicts, targets)])**2
 
 
