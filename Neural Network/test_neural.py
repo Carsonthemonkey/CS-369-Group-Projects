@@ -116,7 +116,7 @@ class Test(TestCase):
         for _ in range(1000):
             for i, t in zip(inputs, targets):
                 net.train(i, t)
-        net.graph_mse(1000, len(targets))
+        net.graph_mse(len(targets))
         for i, t in zip(inputs, targets):
             self.assertAlmostEqual(t[0], net.predict(i)[0], delta=0.2)
         

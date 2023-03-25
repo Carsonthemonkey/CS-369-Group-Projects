@@ -133,7 +133,7 @@ class Network:
     def update_mse(self, outputs, targets):
         self.mse_list.append(mse(outputs, targets))
 
-    def graph_mse(self, m, n):
+    def graph_mse(self, n):
         colors = ['b.', 'g.', 'r.', 'y.', 'c.', 'm.', 'k.', 'w.']  # TODO is it okay this only works for 8
         for i in range(n):
             plt.plot(self.mse_list[i::n], colors[i])
@@ -161,7 +161,7 @@ def main():
     for _ in range(repetitions):
         for i, t in zip(inputs, targets):
             net.train(i, t)
-    net.graph_mse(repetitions, len(targets))
+    net.graph_mse(len(targets))
 
 
 if __name__ == "__main__":
