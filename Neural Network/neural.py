@@ -157,8 +157,7 @@ def main():
     net = Network([2, 5, 1])
     inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
     targets = [[0], [1], [1], [0]]
-    repetitions = 1000
-    for _ in range(repetitions):
+    for _ in range(1000):
         for i, t in zip(inputs, targets):
             net.train(i, t)
     net.graph_mse(len(targets))
