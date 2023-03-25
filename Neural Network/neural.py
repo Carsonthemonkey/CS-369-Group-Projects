@@ -4,7 +4,6 @@ import math
 import random
 from statistics import mean
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 LEARNING_RATE = 1
@@ -83,7 +82,6 @@ class Network:
         :param inputs: Values to use as activations of the input layer.
         :return: The predictions of the neurons in the output layer.
         """
-
         for i in range(len(self.layers[0])):
             self.layers[0][i].activation = inputs[i]
         for layer in self.layers[1:]:
@@ -135,25 +133,9 @@ class Network:
     def update_mse(self, outputs, targets):
         self.mse_list.append(mse(outputs, targets))
 
-#     def train(self, inputs, targets):
-#         """
-#         Feed inputs through this network, then adjust the weights so that the activations of
-# @ -122,14 +130,26 @@ class Network:
-#         :param inputs: A list activation values for the input units.
-#         :param targets: A list desired activation values for the output units.
-#         """
-#         # self.predict(inputs)
-#         predict = self.predict(inputs)
-#         self.update_mse(predict, targets)
-#         self.reset_deltas()  # Set all deltas to 0
-#         self.update_deltas(targets)
-#         self.update_weights()
-
     def graph_mse(self, m, n):
-        # print(f'length of list: {len(self.mse_list)}')
         colors = ['b.', 'g.', 'r.', 'y.', 'c.', 'm.', 'k.', 'w.']  # TODO is it okay this only works for 8
         for i in range(n):
-            # plt.plot(self.mse_list[(i * m):((i + 1) * m)], colors[i])
             plt.plot(self.mse_list[i::n], colors[i])
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
@@ -176,9 +158,6 @@ def main():
     inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
     targets = [[0], [1], [1], [0]]
     repetitions = 1000
-    # for i, t in zip(inputs, targets):
-    #     for _ in range(repetitions):
-    #         net.train(i, t)
     for _ in range(repetitions):
         for i, t in zip(inputs, targets):
             net.train(i, t)
