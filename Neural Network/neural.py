@@ -153,7 +153,8 @@ class Network:
         # print(f'length of list: {len(self.mse_list)}')
         colors = ['b.', 'g.', 'r.', 'y.', 'c.', 'm.', 'k.', 'w.']  # TODO is it okay this only works for 8
         for i in range(n):
-            plt.plot(self.mse_list[(i * m):((i + 1) * m)], colors[i])
+            # plt.plot(self.mse_list[(i * m):((i + 1) * m)], colors[i])
+            plt.plot(self.mse_list[i::n], colors[i])
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
         plt.show()
@@ -161,7 +162,6 @@ class Network:
 
 def mse(predicts, targets):
     return mean([p - t for p, t in zip(predicts, targets)])**2
-
 
 
 def logistic(x):
@@ -176,12 +176,12 @@ def main():
     inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
     targets = [[0], [1], [1], [0]]
     repetitions = 1000
-    for i, t in zip(inputs, targets):
-        for _ in range(repetitions):
-            net.train(i, t)
-    # for _ in range(1000):
-    #     for i, t in zip(inputs, targets):
+    # for i, t in zip(inputs, targets):
+    #     for _ in range(repetitions):
     #         net.train(i, t)
+    for _ in range(repetitions):
+        for i, t in zip(inputs, targets):
+            net.train(i, t)
     net.graph_mse(repetitions, len(targets))
 
 
