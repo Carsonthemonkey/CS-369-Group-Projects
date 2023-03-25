@@ -121,7 +121,6 @@ class Network:
             for unit in layer:
                 unit.update_weights()
 
-
     def train(self, inputs, targets):
         """
         Feed inputs through this network, then adjust the weights so that the activations of
@@ -149,12 +148,13 @@ class Network:
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
         plt.show()
-    
-    
+
     def combine_mse(self) -> None:
         """Combine MSE (mean squared error) values from current training epochs."""
         self.mse_list.append(mean(self.mse_list_trains))
         self.mse_list_trains = []
+
+
 def mse(predicts: list, targets: list) -> float:
     """
     Mean Squared error
@@ -163,7 +163,6 @@ def mse(predicts: list, targets: list) -> float:
     :param returns: The mean squared error of the predictions
     """
     return mean([p - t for p, t in zip(predicts, targets)])**2
-
 
 
 def logistic(x):
