@@ -74,6 +74,7 @@ class Network:
         self.layers = [None] * len(sizes)
         self.layers[0] = [InputNeuron() for _ in range(sizes[0])]
         self.mse_list = []
+        self.mse_list_trains = []
         for i in range(1, len(sizes) - 1):
             self.layers[i] = [HiddenNeuron(self.layers[i-1]) for _ in range(sizes[i])]
         self.layers[-1] = [OutputNeuron(self.layers[-2]) for _ in range(sizes[-1])]
@@ -134,7 +135,7 @@ class Network:
         self.update_weights()
 
     def update_mse(self, outputs, targets):
-        self.mse_list.append(mse(outputs, targets))
+        self.mse_list_trains.append(mse(outputs, targets))
 
     def train(self, inputs, targets):
         """
@@ -151,12 +152,15 @@ class Network:
         self.update_weights()
 
     def graph_mse(self):
-        print(f'length of list: {self.mse_list}')
+        print(f'length of list: {self.mse_list_trains}')
         plt.plot(self.mse_list, "b.")
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
         plt.show()
-
+        
+    def combine_mse(self):
+        self.mse_list.append(mean(self.mse_list_trains))
+        self.mse_list_trains = []
 
 def mse(predicts, targets):
     return mean([p - t for p, t in zip(predicts, targets)])**2
@@ -168,3 +172,14 @@ def logistic(x):
     Logistic sigmoid squashing function.
     """
     return 1 / (1 + math.exp(-x))
+
+
+if __name__ == '__main__':
+    net = Network([2, 5, 1])
+    inputs = [[0, 0], [0, 1], [1, 0], [1, 1]]
+    targets = [[0], [1], [1], [0]]
+    for _ in range(1000):
+        for i, t in zip(inputs, targets):
+            net.train(i, t)
+        net.combine_mse()
+    net.graph_mse()
