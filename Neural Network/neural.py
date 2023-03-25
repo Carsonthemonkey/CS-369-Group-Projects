@@ -134,7 +134,7 @@ class Network:
         self.mse_list.append(mse(outputs, targets))
 
     def graph_mse(self, n):
-        colors = ['b.', 'g.', 'r.', 'y.', 'c.', 'm.', 'k.', 'w.']  # TODO is it okay this only works for 8
+        colors = ['b.', 'g.', 'r.', 'y.', 'c.', 'm.', 'k.']  # TODO is it okay this only works for 7
         for i in range(n):
             plt.plot(self.mse_list[i::n], colors[i])
         plt.xlabel("Iterations")
