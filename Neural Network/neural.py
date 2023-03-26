@@ -134,7 +134,7 @@ class Network:
         self.mse_list.append(mse(outputs, targets))
 
     def graph_mse(self, n):
-        #This uses matplotlib color maps to generate colors. viridis is the color theme, so you can switch it for any colormaps
+        #This uses matplotlib color maps to generate colors. Plasma is the color theme, so you can switch it for any colormaps
         # at https://matplotlib.org/stable/tutorials/colors/colormaps.html
         colors = plt.cm.plasma([i/n for i in range(n)]) 
         for i in range(n):
