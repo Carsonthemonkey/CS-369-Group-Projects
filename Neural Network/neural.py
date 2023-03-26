@@ -132,33 +132,40 @@ class Network:
         self.update_deltas(targets)
         self.update_weights()
 
-    def update_mse(self, outputs, targets):
+    def update_mse(self, outputs: list, targets: list) -> None:
         self.mse_list.append(mse(outputs, targets))
 
-    def update_predicts(self, output):
+    def update_predicts(self, output: float) -> None:
         self.predicts.append(output)
 
-    def graph_mse(self, n):
+    def graph_mse(self, n: int) -> None:
+        """
+        Graphs the Mean squared error as the network learns
+        :param n: the number of iterations that are being graphed
+        """
         #This uses matplotlib color maps to generate colors. Plasma is the color theme, so you can switch it for any colormaps
         # at https://matplotlib.org/stable/tutorials/colors/colormaps.html
         colors = plt.cm.plasma([i/n for i in range(n)]) 
         for i in range(n):
             print(colors[i])
-            plt.plot(self.mse_list[i::n], marker='.', linestyle='', color=colors[i])
+            plt.plot(self.mse_list[i::n], marker='', color=colors[i])
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
         plt.show()
 
-    def graph_predict(self, n):
+    def graph_predict(self, n: int) -> None:
         #very similar to plotting mse
         colors = plt.cm.plasma([i / n for i in range(n)])
         for i in range(n):
-            plt.plot(self.predicts[i::n], marker='.', linestyle='', color=colors[i])
+            plt.plot(self.predicts[i::n], marker='', color=colors[i])
         plt.xlabel("Iterations")
         plt.ylabel("Predictions")
         plt.show()
 
-def mse(predicts, targets):
+def mse(predicts: list, targets: list) -> float:
+    """
+    Mean squared error
+    """
     return mean([p - t for p, t in zip(predicts, targets)])**2
 
 
