@@ -153,9 +153,10 @@ class Network:
         #very similar to plotting mse
         colors = plt.cm.plasma([i / n for i in range(n)])
         for i in range(n):
-            plt.plot(self.predicts[i::n], marker='.', linestyle='', color=colors[i])
+            plt.plot(self.predicts[i::n], marker='.', linestyle='', color=colors[i], label=i+1)
         plt.xlabel("Iterations")
         plt.ylabel("Predictions")
+        plt.legend()
         plt.show()
 
 def mse(predicts, targets):
