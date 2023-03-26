@@ -73,6 +73,7 @@ class Network:
         self.layers = [None] * len(sizes)
         self.layers[0] = [InputNeuron() for _ in range(sizes[0])]
         self.mse_list = []
+        self.predicts = []
         for i in range(1, len(sizes) - 1):
             self.layers[i] = [HiddenNeuron(self.layers[i-1]) for _ in range(sizes[i])]
         self.layers[-1] = [OutputNeuron(self.layers[-2]) for _ in range(sizes[-1])]
@@ -126,12 +127,16 @@ class Network:
         """
         predict = self.predict(inputs)
         self.update_mse(predict, targets)
+        self.update_predicts(predict)
         self.reset_deltas()  # Set all deltas to 0
         self.update_deltas(targets)
         self.update_weights()
 
     def update_mse(self, outputs, targets):
         self.mse_list.append(mse(outputs, targets))
+
+    def update_predicts(self, output):
+        self.predicts.append(output)
 
     def graph_mse(self, n):
         #This uses matplotlib color maps to generate colors. Plasma is the color theme, so you can switch it for any colormaps
@@ -144,6 +149,14 @@ class Network:
         plt.ylabel("Mean Squared Error")
         plt.show()
 
+    def graph_predict(self, n):
+        #very similar to plotting mse
+        colors = plt.cm.plasma([i / n for i in range(n)])
+        for i in range(n):
+            plt.plot(self.predicts[i::n], marker='.', linestyle='', color=colors[i])
+        plt.xlabel("Iterations")
+        plt.ylabel("Predictions")
+        plt.show()
 
 def mse(predicts, targets):
     return mean([p - t for p, t in zip(predicts, targets)])**2
@@ -164,7 +177,7 @@ def main():
         for i, t in zip(inputs, targets):
             net.train(i, t)
     net.graph_mse(len(targets))
-
+    net.graph_predict(len(targets))
 
 if __name__ == "__main__":
     main()
