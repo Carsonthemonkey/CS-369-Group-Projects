@@ -134,9 +134,12 @@ class Network:
         self.mse_list.append(mse(outputs, targets))
 
     def graph_mse(self, n):
-        colors = ['b.', 'g.', 'r.', 'y.', 'c.', 'm.', 'k.']  # TODO is it okay this only works for 7
+        #This uses matplotlib color maps to generate colors. viridis is the color theme, so you can switch it for any colormaps
+        # at https://matplotlib.org/stable/tutorials/colors/colormaps.html
+        colors = plt.cm.plasma([i/n for i in range(n)]) 
         for i in range(n):
-            plt.plot(self.mse_list[i::n], colors[i])
+            print(colors[i])
+            plt.plot(self.mse_list[i::n], marker='.', linestyle='', color=colors[i])
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
         plt.show()
