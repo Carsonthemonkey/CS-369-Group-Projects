@@ -4,7 +4,6 @@ import math
 import random
 from statistics import mean
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 LEARNING_RATE = 1
@@ -38,7 +37,6 @@ class OutputNeuron:
         the previous layer.
         :param target: The desired output of this neuron.
         """
-
         a = self.activation
         t = target
         self.delta = -a * (1 - a) * (t - a)
@@ -71,7 +69,6 @@ class Network:
         """
         :param sizes: A list of the number of neurons in each layer, e.g., [2, 2, 1] for a network that can learn XOR.
         """
-        # self.predictions = {}
         self.layers = [None] * len(sizes)
         self.layers[0] = [InputNeuron() for _ in range(sizes[0])]
         self.mse_list = []
@@ -85,7 +82,6 @@ class Network:
         :param inputs: Values to use as activations of the input layer.
         :return: The predictions of the neurons in the output layer.
         """
-
         for i in range(len(self.layers[0])):
             self.layers[0][i].activation = inputs[i]
         for layer in self.layers[1:]:
