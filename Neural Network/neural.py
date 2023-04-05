@@ -143,12 +143,11 @@ class Network:
         Graphs the Mean squared error as the network learns
         :param n: the number of iterations that are being graphed
         """
-        #This uses matplotlib color maps to generate colors. Plasma is the color theme, so you can switch it for any colormaps
+        # This uses matplotlib color maps to generate colors. Plasma is the color theme, so you can switch it for any colormaps
         # at https://matplotlib.org/stable/tutorials/colors/colormaps.html
         colors = plt.cm.plasma([i/n for i in range(n)]) 
         for i in range(n):
-            print(colors[i])
-            plt.plot(self.mse_list[i::n], marker='', color=colors[i])
+            plt.plot(self.mse_list[i::n], color=colors[i])
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
         plt.show()
@@ -157,7 +156,7 @@ class Network:
         #very similar to plotting mse
         colors = plt.cm.plasma([i / n for i in range(n)])
         for i in range(n):
-            plt.plot(self.predicts[i::n], marker='', color=colors[i], label=i+1)
+            plt.plot(self.predicts[i::n], color=colors[i], label=i+1)
         plt.xlabel("Iterations")
         plt.ylabel("Predictions")
         plt.legend()
