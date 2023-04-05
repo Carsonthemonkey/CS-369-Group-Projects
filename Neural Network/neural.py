@@ -37,7 +37,6 @@ class OutputNeuron:
         the previous layer.
         :param target: The desired output of this neuron.
         """
-
         a = self.activation
         t = target
         self.delta = -a * (1 - a) * (t - a)
@@ -143,8 +142,8 @@ class Network:
         Graphs the Mean squared error as the network learns
         :param n: the number of iterations that are being graphed
         """
-        # This uses matplotlib color maps to generate colors. Plasma is the color theme, so you can switch it for any colormaps
-        # at https://matplotlib.org/stable/tutorials/colors/colormaps.html
+        # This uses matplotlib color maps to generate colors. Plasma is the color theme.
+        # You can switch it for any colormaps at https://matplotlib.org/stable/tutorials/colors/colormaps.html
         colors = plt.cm.plasma([i/n for i in range(n)]) 
         for i in range(n):
             plt.plot(self.mse_list[i::n], color=colors[i])
@@ -153,7 +152,6 @@ class Network:
         plt.show()
 
     def graph_predict(self, n: int) -> None:
-        #very similar to plotting mse
         colors = plt.cm.plasma([i / n for i in range(n)])
         for i in range(n):
             plt.plot(self.predicts[i::n], color=colors[i], label=i+1)
@@ -161,6 +159,7 @@ class Network:
         plt.ylabel("Predictions")
         plt.legend()
         plt.show()
+
 
 def mse(predicts: list, targets: list) -> float:
     """
@@ -185,6 +184,7 @@ def main():
             net.train(i, t)
     net.graph_mse(len(targets))
     net.graph_predict(len(targets))
+
 
 if __name__ == "__main__":
     main()
