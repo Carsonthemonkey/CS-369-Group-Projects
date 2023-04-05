@@ -37,7 +37,6 @@ class OutputNeuron:
         the previous layer.
         :param target: The desired output of this neuron.
         """
-
         a = self.activation
         t = target
         self.delta = -a * (1 - a) * (t - a)
@@ -134,11 +133,10 @@ class Network:
         self.mse_list.append(mse(outputs, targets))
 
     def graph_mse(self, n):
-        #This uses matplotlib color maps to generate colors. Plasma is the color theme, so you can switch it for any colormaps
-        # at https://matplotlib.org/stable/tutorials/colors/colormaps.html
+        # This uses matplotlib color maps to generate colors. Plasma is the color theme.
+        # You can switch it for any colormaps at https://matplotlib.org/stable/tutorials/colors/colormaps.html
         colors = plt.cm.plasma([i/n for i in range(n)]) 
         for i in range(n):
-            print(colors[i])
             plt.plot(self.mse_list[i::n], marker='.', linestyle='', color=colors[i])
         plt.xlabel("Iterations")
         plt.ylabel("Mean Squared Error")
