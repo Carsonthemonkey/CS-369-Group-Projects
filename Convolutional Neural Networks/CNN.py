@@ -4,6 +4,18 @@ from PIL import Image
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from functools import partial
+from pathlib import Path
+
+IMAGES_PATH = Path() / "graphs"
+IMAGES_PATH.mkdir(parents=True, exist_ok=True)
+
+
+def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
+    path = IMAGES_PATH / f"{fig_id}.{fig_extension}"
+    if tight_layout:
+        plt.tight_layout()
+    plt.savefig(path, format=fig_extension, dpi=resolution)
+
 
 # Read /home/labs/drake/cs369/answers.csv into a pandas dataframe
 answers = pd.read_csv('/home/labs/drake/cs369/answers.csv')
@@ -55,22 +67,6 @@ history = model.fit(X_train, y_train, epochs=10,
 
 # Now build a more complicated convolutional network. You might look at the example used on
 # Fashion MNIST from the book for inspiration.
-print("ON TO THE FANCY STUFF!!!!!!!!!!!!!!!!!!!!!!")
-
-# faster but accuracy is worse (by like 6%)
-# model = tf.keras.models.Sequential([
-#     tf.keras.layers.Conv2D(32, 3, activation="relu",
-#                            padding="same", input_shape=[53, 358, 1]),
-#     tf.keras.layers.MaxPooling2D(2),
-#     tf.keras.layers.Conv2D(64, 3, activation="relu", padding="same"),
-#     tf.keras.layers.MaxPooling2D(2),
-#     tf.keras.layers.Conv2D(128, 3, activation="relu", padding="same"),
-#     tf.keras.layers.MaxPooling2D(2),
-#     tf.keras.layers.Flatten(),
-#     tf.keras.layers.Dense(128, activation="relu"),
-#     tf.keras.layers.Dropout(0.5),
-#     tf.keras.layers.Dense(1, activation="sigmoid")
-# ])  # job 529
 
 # see book pg 496
 DefaultConv2D = partial(tf.keras.layers.Conv2D, kernel_size=3,
@@ -88,7 +84,6 @@ model = tf.keras.models.Sequential([
     tf.keras.layers.Dense(128, activation="relu",
                           kernel_initializer="he_normal"),
     tf.keras.layers.Dropout(0.5),
-    # tf.keras.layers.Dense(units=10, activation="softmax")
     tf.keras.layers.Dense(units=1, activation="sigmoid")  # job 528, 531
 ])
 
@@ -103,3 +98,11 @@ history = model.fit(X_train, y_train, epochs=10,
 
 # Once you have your final model, train it one more time, being sure to save the learning curve
 # history plot and to test it on the test data.
+pd.DataFrame(history.history).plot(
+    figsize=(8, 5), xlim=[0, 11], ylim=[0, 1], grid=True, xlabel="Epoch",
+    style=["r--", "r--.", "b-", "b-*"])
+plt.legend(loc="lower left")  # extra code
+save_fig("keras_learning_curves_plot")  # extra code
+plt.show()
+
+model.evaluate(X_test, y_test)
