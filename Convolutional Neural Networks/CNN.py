@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 from PIL import Image
+import tensorflow as tf
+import matplotlib.pyplot as plt
+from functools import partial
 
 # Read /home/labs/drake/cs369/answers.csv into a pandas dataframe
 answers = pd.read_csv('/home/labs/drake/cs369/answers.csv')
@@ -35,16 +38,68 @@ print('SHAPES   train x:  ', np.shape(X_train),
       '        train y: ', np.shape(y_train))
 
 # Build a very simple network that has only a single output neuron with sigmoid activation.
+tf.random.set_seed(42)
+np.random.seed(42)
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(1, activation="sigmoid")
+])
 
 # Compile the model and fit it to the data. 10 epochs is probably good. When I did this,
 # I got a validation accuracy of around 67%.
+model.compile(loss="binary_crossentropy",
+              optimizer="sgd",
+              metrics=["accuracy"])
+history = model.fit(X_train, y_train, epochs=10,
+                    validation_data=(X_valid, y_valid), verbose=2)
 
 # Now build a more complicated convolutional network. You might look at the example used on
 # Fashion MNIST from the book for inspiration.
+print("ON TO THE FANCY STUFF!!!!!!!!!!!!!!!!!!!!!!")
+
+# faster but accuracy is worse (by like 6%)
+# model = tf.keras.models.Sequential([
+#     tf.keras.layers.Conv2D(32, 3, activation="relu",
+#                            padding="same", input_shape=[53, 358, 1]),
+#     tf.keras.layers.MaxPooling2D(2),
+#     tf.keras.layers.Conv2D(64, 3, activation="relu", padding="same"),
+#     tf.keras.layers.MaxPooling2D(2),
+#     tf.keras.layers.Conv2D(128, 3, activation="relu", padding="same"),
+#     tf.keras.layers.MaxPooling2D(2),
+#     tf.keras.layers.Flatten(),
+#     tf.keras.layers.Dense(128, activation="relu"),
+#     tf.keras.layers.Dropout(0.5),
+#     tf.keras.layers.Dense(1, activation="sigmoid")
+# ])  # job 529
+
+# see book pg 496
+DefaultConv2D = partial(tf.keras.layers.Conv2D, kernel_size=3,
+                        padding="same", activation="relu", kernel_initializer="he_normal")
+model = tf.keras.models.Sequential([
+    DefaultConv2D(filters=64, kernel_size=7, input_shape=[53, 358, 1]),
+    tf.keras.layers.MaxPooling2D(),
+    DefaultConv2D(filters=128),
+    DefaultConv2D(filters=128),
+    tf.keras.layers.MaxPooling2D(),
+    DefaultConv2D(filters=256),
+    DefaultConv2D(filters=256),
+    tf.keras.layers.MaxPooling2D(),
+    tf.keras.layers.Flatten(),
+    tf.keras.layers.Dense(128, activation="relu",
+                          kernel_initializer="he_normal"),
+    tf.keras.layers.Dropout(0.5),
+    # tf.keras.layers.Dense(units=10, activation="softmax")
+    tf.keras.layers.Dense(units=1, activation="sigmoid")  # job 528, 531
+])
 
 # Fit this more complicated model to the data. Plot the learning curve history. If you are able
 # to get an accuracy over 80%, you’re good. If not, go back and tweak your model or hyperparameters.
 # I expect some teams will be able to do significantly better than my result!
+model.compile(loss="binary_crossentropy",
+              optimizer="sgd",
+              metrics=["accuracy"])
+history = model.fit(X_train, y_train, epochs=10,
+                    validation_data=(X_valid, y_valid), verbose=2)
 
 # Once you have your final model, train it one more time, being sure to save the learning curve
 # history plot and to test it on the test data.
